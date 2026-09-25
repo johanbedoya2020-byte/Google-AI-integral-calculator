@@ -1,0 +1,6 @@
+{
+  "name": "Integral Calculus Academy",
+  "description": "Comprehensive educational platform for integral calculus featuring step-by-step solutions, numerical approximation visualizers (Riemann, Trapezoid, Simpson), algebraic derivations, and interactive practice across all integration methods.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
