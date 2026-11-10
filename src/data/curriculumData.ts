@@ -10,7 +10,7 @@ export interface TopicInfo {
   overview: string;
 }
 
-export const TOPIC_CURRICULUM: Record<TopicCategory, TopicInfo> = {
+export const TOPIC_CURRICULUM: Partial<Record<TopicCategory, TopicInfo>> = {
   numerical_methods: {
     id: 'numerical_methods',
     title: 'Numerical Methods',

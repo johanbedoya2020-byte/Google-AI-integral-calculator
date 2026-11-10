@@ -1,3 +1,4 @@
+// Coming soon: Phase 2/3.
 import React, { useState } from 'react';
 import { PracticeProblem, QuizOption } from '../types/calculus';
 import { LOCALIZED_PRACTICE_PROBLEMS } from '../data/localizedContent';
@@ -48,6 +49,13 @@ export const PracticeArena: React.FC<PracticeArenaProps> = ({ onLoadInSolver }) 
       if (filterTopic === 'definite') return top.includes('defin');
       if (filterTopic === 'invtrig') return top.includes('invers') || top.includes('hiperb') || top.includes('hyperb');
       if (filterTopic === 'numerical') return top.includes('numér') || top.includes('numer') || top.includes('simpson');
+      if (filterTopic === 'revolution') return top.includes('revolu') || top.includes('disco') || top.includes('arandela') || top.includes('washer');
+      if (filterTopic === 'shells') return top.includes('shell') || top.includes('casquete') || top.includes('casca') || top.includes('tube');
+      if (filterTopic === 'cross_sections') return top.includes('cross') || top.includes('secci') || top.includes('transvers');
+      if (filterTopic === 'arc_length') return top.includes('arc') || top.includes('longitud') || top.includes('comprimento');
+      if (filterTopic === 'trigsub') return top.includes('trig') && top.includes('sub');
+      if (filterTopic === 'universal') return top.includes('weierstrass') || top.includes('universal');
+      if (filterTopic === 'irrational') return top.includes('irrac') || top.includes('radical');
       return true;
     });
   }, [presetList, filterTopic]);
@@ -199,6 +207,13 @@ export const PracticeArena: React.FC<PracticeArenaProps> = ({ onLoadInSolver }) 
           <div className="flex flex-wrap items-center gap-1.5 text-xs">
             {[
               { id: 'all', label: t('allTopics') },
+              { id: 'revolution', label: t('topicRevolution') },
+              { id: 'shells', label: t('topicShells') },
+              { id: 'cross_sections', label: t('topicCrossSections') },
+              { id: 'arc_length', label: t('topicArcLength') },
+              { id: 'trigsub', label: t('topicTrigSub') },
+              { id: 'universal', label: t('topicUniversalSub') },
+              { id: 'irrational', label: t('topicIrrational') },
               { id: 'sub', label: t('topicSub') },
               { id: 'parts', label: t('topicParts') },
               { id: 'trinomial', label: t('topicTrinomials') },
@@ -411,7 +426,7 @@ export const PracticeArena: React.FC<PracticeArenaProps> = ({ onLoadInSolver }) 
                   <span className="font-bold block">
                     {selectedOption.isCorrect ? t('quizCorrect') : t('quizIncorrect')}
                   </span>
-                  <p className="leading-relaxed text-slate-300">{selectedOption.feedback}</p>
+                  <FormattedMathText content={selectedOption.feedback} className="leading-relaxed text-slate-300 text-xs" />
                 </div>
               </div>
             )}

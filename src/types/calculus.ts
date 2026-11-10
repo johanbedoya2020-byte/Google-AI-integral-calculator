@@ -5,7 +5,17 @@ export type TopicCategory =
   | 'substitution'
   | 'inverse_trig_hyperbolic'
   | 'trinomials'
-  | 'parts';
+  | 'parts'
+  | 'irrational_functions'
+  | 'trig_integrals'
+  | 'trig_substitution'
+  | 'universal_substitution'
+  | 'integral_applications'
+  | 'cross_sections'
+  | 'solids_revolution'
+  | 'cylindrical_shells'
+  | 'arc_length'
+  | 'surface_area';
 
 export interface TheoryFormula {
   name: string;

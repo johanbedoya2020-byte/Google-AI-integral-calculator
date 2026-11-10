@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Coming soon: Phase 2/3.
 import React, { useState, useEffect } from 'react';
 import { SolutionResult, CuratedExample } from './types/calculus';
 import { CURATED_EXAMPLES } from './data/curriculumData';
@@ -16,6 +17,8 @@ import { NumericalVisualizer } from './components/NumericalVisualizer';
 import { CurriculumBrowser } from './components/CurriculumBrowser';
 import { PracticeArena } from './components/PracticeArena';
 import { FormulaCheatsheetModal } from './components/FormulaCheatsheetModal';
+import { GeoGebra3DLab } from './components/GeoGebra3DLab';
+import { TutorialModal } from './components/TutorialModal';
 import {
   Calculator,
   Activity,
@@ -26,11 +29,12 @@ import {
   ExternalLink,
   Sigma,
   HelpCircle,
+  Box,
 } from 'lucide-react';
 
 function AcademyAppContent() {
   const { t, language } = useLanguage();
-  const [activeTab, setActiveTab] = useState<'solver' | 'numerical' | 'curriculum' | 'practice'>('solver');
+  const [activeTab, setActiveTab] = useState<'solver' | 'geogebra3d' | 'numerical' | 'curriculum' | 'practice'>('solver');
   const [currentCuratedId, setCurrentCuratedId] = useState<string>('num-simpson-1');
   const [currentSolution, setCurrentSolution] = useState<SolutionResult>(() => {
     const list = getCuratedExamplesByLanguage(language);
@@ -38,6 +42,7 @@ function AcademyAppContent() {
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isTutorialOpen, setIsTutorialOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // When language changes, update current solution if it corresponds to a curated example
@@ -187,6 +192,11 @@ function AcademyAppContent() {
                 <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                   {t('appBadge')}
                 </span>
+                {/* Phase 2 Active Indicator */}
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-medium rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  {t('phase2Active')}
+                </span>
               </div>
               <p className="text-[11px] text-slate-400 hidden sm:block">
                 {t('appSubtitle')}
@@ -194,9 +204,17 @@ function AcademyAppContent() {
             </div>
           </div>
 
-          {/* Right Action: Language Selector & Formula Cheat Sheet Button */}
-          <div className="flex items-center gap-2.5">
+          {/* Right Action: Language Selector, Student Guide & Formula Cheat Sheet Button */}
+          <div className="flex items-center gap-2">
             <LanguageSelector />
+
+            <button
+              onClick={() => setIsTutorialOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/40 text-xs font-semibold transition cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+              <span className="hidden sm:inline">{t('studentGuide')}</span>
+            </button>
 
             <button
               onClick={() => setIsModalOpen(true)}
@@ -212,6 +230,7 @@ function AcademyAppContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
           {[
             { id: 'solver', labelKey: 'tabSolver', icon: Calculator },
+            { id: 'geogebra3d', labelKey: 'tabGeoGebra3D', icon: Box },
             { id: 'numerical', labelKey: 'tabNumerical', icon: Activity },
             { id: 'curriculum', labelKey: 'tabCurriculum', icon: BookOpen },
             { id: 'practice', labelKey: 'tabPractice', icon: Award },
@@ -283,11 +302,27 @@ function AcademyAppContent() {
           />
         )}
 
+        {/* Tab 5: GeoGebra 2D & 3D Lab */}
+        {activeTab === 'geogebra3d' && (
+          <GeoGebra3DLab
+            onLoadIntoSolver={(problemLatex, topic) => {
+              setActiveTab('solver');
+              handleSolve(problemLatex, topic || 'auto');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenTutorial={() => setIsTutorialOpen(true)}
+          />
+        )}
+
         {/* Tab 3: Curriculum & Syllabus Modules */}
         {activeTab === 'curriculum' && (
           <CurriculumBrowser
             onSelectExample={handleSelectCurated}
             onOpenNumericalLab={handleOpenNumericalLab}
+            onOpenGeoGebra3D={() => {
+              setActiveTab('geogebra3d');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           />
         )}
 
@@ -296,27 +331,35 @@ function AcademyAppContent() {
       </main>
 
       {/* Footer */}
+      {/* Phase 2: 3D GeoGebra & Advanced Calculus */}
       <footer className="border-t border-slate-900 bg-slate-950 py-6 text-xs text-slate-500 text-center">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p>© {new Date().getFullYear()} {t('appName')} — {t('appSubtitle')}</p>
-          <div className="flex items-center gap-4 text-slate-400">
-            <span>Riemann</span>
+          <div className="flex items-center gap-2 text-emerald-400/90 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 text-[11px] font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span>{t('phase2Active')}</span>
+          </div>
+          <div className="flex items-center gap-3 text-slate-400 flex-wrap justify-center text-[11px]">
+            <span>Riemann & Simpson</span>
             <span>•</span>
-            <span>Trapezoid</span>
+            <span>Disks & Washers</span>
             <span>•</span>
-            <span>Simpson</span>
+            <span>Cylindrical Shells</span>
             <span>•</span>
-            <span>u-Sub</span>
+            <span>Cross-Sections</span>
             <span>•</span>
-            <span>Trinomials</span>
+            <span>Arc Length & Surface</span>
             <span>•</span>
-            <span>Parts</span>
+            <span>Weierstrass Universal Sub</span>
           </div>
         </div>
       </footer>
 
       {/* Master Formula Cheat Sheet Modal */}
       <FormulaCheatsheetModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+      {/* Student Guide & Tutorial Modal */}
+      <TutorialModal isOpen={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
     </div>
   );
 }

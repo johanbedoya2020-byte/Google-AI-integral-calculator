@@ -158,9 +158,19 @@ export const IntegralSolverInput: React.FC<IntegralSolverInputProps> = ({
             { id: 'definite_integrals', labelKey: 'topicDefinite' },
             { id: 'direct', labelKey: 'topicDirect' },
             { id: 'substitution', labelKey: 'topicSub' },
+            { id: 'trig_integrals', labelKey: 'topicTrigIntegrals' },
+            { id: 'trig_substitution', labelKey: 'topicTrigSub' },
+            { id: 'universal_substitution', labelKey: 'topicUniversalSub' },
+            { id: 'irrational_functions', labelKey: 'topicIrrational' },
             { id: 'inverse_trig_hyperbolic', labelKey: 'topicInvTrig' },
             { id: 'trinomials', labelKey: 'topicTrinomials' },
             { id: 'parts', labelKey: 'topicParts' },
+            { id: 'integral_applications', labelKey: 'topicApplications' },
+            { id: 'solids_revolution', labelKey: 'topicRevolution' },
+            { id: 'cylindrical_shells', labelKey: 'topicShells' },
+            { id: 'cross_sections', labelKey: 'topicCrossSections' },
+            { id: 'arc_length', labelKey: 'topicArcLength' },
+            { id: 'surface_area', labelKey: 'topicSurfaceArea' },
           ].map((item) => (
             <button
               key={item.id}

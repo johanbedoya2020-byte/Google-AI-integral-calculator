@@ -10,11 +10,21 @@ interface MathViewProps {
 export const MathView: React.FC<MathViewProps> = ({ math, block = false, className = '' }) => {
   const html = useMemo(() => {
     if (!math) return '';
-    // Strip leading/trailing dollar signs if passed directly
     let cleanMath = math.trim();
+
+    // Strip standalone block delimiters: $$ ... $$ or \[ ... \]
     if (cleanMath.startsWith('$$') && cleanMath.endsWith('$$')) {
       cleanMath = cleanMath.slice(2, -2).trim();
+    } else if (cleanMath.startsWith('\\[') && cleanMath.endsWith('\\]')) {
+      cleanMath = cleanMath.slice(2, -2).trim();
+    } else if (cleanMath.startsWith('\\(') && cleanMath.endsWith('\\)')) {
+      // Strip inline escape delimiters: \( ... \)
+      cleanMath = cleanMath.slice(2, -2).trim();
     } else if (cleanMath.startsWith('$') && cleanMath.endsWith('$')) {
+      // Strip legacy single dollar delimiters: $ ... $
+      cleanMath = cleanMath.slice(1, -1).trim();
+    } else if (cleanMath.startsWith('[') && cleanMath.endsWith(']') && cleanMath.includes('\\')) {
+      // Strip bracket formatting: [ ... ]
       cleanMath = cleanMath.slice(1, -1).trim();
     }
 
@@ -23,6 +33,16 @@ export const MathView: React.FC<MathViewProps> = ({ math, block = false, classNa
         displayMode: block,
         throwOnError: false,
         strict: false,
+        trust: true,
+        macros: {
+          '\\arsinh': '\\operatorname{arsinh}',
+          '\\arcosh': '\\operatorname{arcosh}',
+          '\\artanh': '\\operatorname{artanh}',
+          '\\sen': '\\sin',
+          '\\tg': '\\tan',
+          '\\ctg': '\\cot',
+          '\\arctg': '\\arctan',
+        },
       });
     } catch (err) {
       console.warn('KaTeX rendering error for:', math, err);
@@ -38,7 +58,7 @@ export const MathView: React.FC<MathViewProps> = ({ math, block = false, classNa
   );
 };
 
-// Component to parse a mixed text string with embedded $...$ and $$...$$
+// Component to parse a mixed text string with embedded KaTeX blocks
 interface FormattedTextProps {
   content: string;
   className?: string;
@@ -53,14 +73,11 @@ export const FormattedMathText: React.FC<FormattedTextProps> = ({
   const parts = useMemo(() => {
     if (!content) return [];
 
-    // First normalize any escaped dollars if any: \$ -> $
     let normalized = content;
 
-    // Check if there are an odd number of $ signs (unmatched)
+    // Check if there are an odd number of unescaped $ signs (unmatched legacy math)
     const dollarCount = (normalized.match(/(?<!\\)\$/g) || []).length;
-    // If odd number and not matching, remove lone stray $
     if (dollarCount % 2 !== 0) {
-      // Find the last unmatched dollar and remove or close it
       const lastDollarIdx = normalized.lastIndexOf('$');
       if (lastDollarIdx !== -1) {
         normalized =
@@ -68,26 +85,51 @@ export const FormattedMathText: React.FC<FormattedTextProps> = ({
       }
     }
 
-    // Regex to split text by $$...$$ (display) and $...$ (inline)
-    const regex = /(\$\$[\s\S]*?\$\$|\$[^\$]+?\$)/g;
+    // Regex to strictly split KaTeX expressions from plain text:
+    // 1. $$ ... $$ (standalone display blocks)
+    // 2. \[ ... \] (standard LaTeX display blocks, normalized to block display)
+    // 3. \( ... \) (inline math with escape syntax)
+    // 4. $ ... $   (legacy inline math fallback)
+    const regex = /(\$\$[\s\S]*?\$\$|\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\)|\$[^\$]+?\$)/g;
     const tokens = normalized.split(regex);
 
     return tokens.map((token, idx) => {
+      if (!token) return null;
+
+      // Rule 2: Standalone, centered formula blocks: $$ katex_code $$
       if (token.startsWith('$$') && token.endsWith('$$')) {
         const mathContent = token.slice(2, -2).trim();
         return (
-          <div key={idx} className="my-2 overflow-x-auto py-1 text-center">
+          <div key={idx} className="my-2.5 overflow-x-auto py-1 text-center">
             <MathView math={mathContent} block={true} />
           </div>
         );
-      } else if (token.startsWith('$') && token.endsWith('$')) {
+      }
+      // Bracket display block: \[ katex_code \]
+      else if (token.startsWith('\\[') && token.endsWith('\\]')) {
+        const mathContent = token.slice(2, -2).trim();
+        return (
+          <div key={idx} className="my-2.5 overflow-x-auto py-1 text-center">
+            <MathView math={mathContent} block={true} />
+          </div>
+        );
+      }
+      // Rule 3: Formulas embedded within the text (inline): \( katex_code \)
+      else if (token.startsWith('\\(') && token.endsWith('\\)')) {
+        const mathContent = token.slice(2, -2).trim();
+        return <MathView key={idx} math={mathContent} block={false} />;
+      }
+      // Fallback single dollar inline: $ katex_code $
+      else if (token.startsWith('$') && token.endsWith('$')) {
         const mathContent = token.slice(1, -1).trim();
         return <MathView key={idx} math={mathContent} block={false} />;
-      } else {
-        // Plain text: strip any stray literal $ that might have survived
+      }
+      // Rule 5: Plain text clearly separated from KaTeX blocks to prevent rendering errors
+      else {
+        // Strip any accidental stray literal $ in plain text
         const cleanText = token.replace(/\$/g, '');
 
-        // Check if there are common LaTeX macros without dollar signs like \Delta x or \frac
+        // Check if there are unbracketed common LaTeX macros in plain text like \Delta x or \int
         if (/\\(Delta|frac|int|sqrt|operatorname|approx|le|ge|ne)\b/.test(cleanText)) {
           return (
             <span key={idx} className="whitespace-pre-line">

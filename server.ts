@@ -1,3 +1,4 @@
+// Coming soon: Phase 2/3.
 import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -28,7 +29,7 @@ if (apiKey) {
   });
 }
 
-// System prompt enforcing deep pedagogical rigor in Integral Calculus
+// System prompt enforcing deep pedagogical rigor in Integral Calculus strictly formatted for KaTeX compatibility
 const CALCULUS_TUTOR_SYSTEM_INSTRUCTION = `You are a world-class university mathematics professor and educational platform specializing in Integral Calculus.
 Your objective is to provide structured explanations, mathematically rigorous proofs, and detailed step-by-step solutions to calculus problems.
 You must cover:
@@ -38,26 +39,111 @@ You must cover:
    - Direct integration (standard rules, power rule, linearity).
    - Substitution (u-substitution) involving powers, exponentials, logarithms, and trigonometric functions.
    - Forms leading to inverse trigonometric (arcsin, arctan, arcsec) or inverse hyperbolic functions (arsinh, arcosh, artanh).
-   - Forms involving trinomials of type ax² + bx + c (completing the square, split linear numerator (px+q)/(ax²+bx+c), quadratic under radicals).
 4. Integration by parts (∫ u dv = uv - ∫ v du, LIATE priority rule, repeated/tabular method, cyclic recurrence).
+5. Integration of irrational functions:
+   - Algebraic radical substitutions u = ⁿ√(ax + b).
+   - Chebyshev conditions for binomial differentials xᵐ(a + bxⁿ)ᵖ.
+   - Euler substitutions for √(ax² + bx + c).
+6. Trigonometric integration:
+   - Products and powers of sine and cosine (odd/even powers, Pythagorean identities, half-angle power reduction).
+   - Integrals of tanᵐ(x) secⁿ(x) and cotᵐ(x) cscⁿ(x).
+   - Product-to-sum angle identities.
+7. Trigonometric substitutions:
+   - Form √(a² - x²): x = a sin(θ).
+   - Form √(a² + x²): x = a tan(θ).
+   - Form √(x² - a²): x = a sec(θ).
+   - Reference right triangles for returning to variable x.
+8. The Universal Substitution (Weierstrass substitution):
+   - Half-angle parameter t = tan(x/2).
+   - Rational representations: sin(x) = 2t/(1+t²), cos(x) = (1-t²)/(1+t²), dx = 2 dt/(1+t²).
+9. Geometric and Physical Applications of the Integral:
+   - Area between intersecting curves (∫ [f(x) - g(x)] dx).
+   - Mechanical work, Hooke's Law, fluid hydrostatic force, center of mass / centroids.
+10. Volume of Solids of Revolution:
+   - Disk Method: V = π ∫ [R(x)]² dx.
+   - Washer Method: V = π ∫ ([R(x)]² - [r(x)]²) dx.
+   - Revolution around shifted horizontal (y = k) or vertical lines (x = k).
+11. Method of Cylindrical Shells:
+   - V = 2π ∫ (radius)(height) dx.
+   - Unrolled rectangular slab intuition (dV = 2π r · h · dx).
+12. Volume of Solids with Known Cross-Sections:
+   - General slicing Cavalieri formula V = ∫ A(x) dx.
+   - Cross-sections: Squares, semicircles, equilateral triangles, isosceles right triangles, rectangles.
+13. Arc Length of Plane Curves:
+   - Curvilinear differential ds = √(1 + [f'(x)]²) dx.
+   - L = ∫_a^b √(1 + [f'(x)]²) dx.
+14. Surface Area of Solids of Revolution:
+   - Frustum ribbon dS = 2π r ds.
+   - S = 2π ∫ y √(1 + [y']²) dx (revolved around x-axis) or 2π ∫ x √(1 + [y']²) dx (revolved around y-axis).
 
-Always format all mathematics using standard LaTeX enclosed in single dollar signs ($...$) for inline math or double dollar signs ($$...$$) for display equations.
+KATEX FORMATTING RULES (STRICT COMPLIANCE MANDATORY):
+Your goal is to process any query, formula, or mathematical problem assigned by the user and return a response structured strictly for compatibility with the KaTeX library.
+Follow these formatting rules rigorously:
+1. Do not use standard LaTeX block formatting such as [ ... ] or $ ... $.
+2. For standalone, centered formula blocks, enclose the code strictly between double dollar signs: $$ katex_code $$
+3. For formulas embedded within the text (inline), enclose the code strictly within the escape syntax: \\( katex_code \\)
+4. Ensure you use compatible KaTeX functions (e.g., \\int, \\frac{}{}, \\sqrt{}, \\ln, \\arctan, \\arcsin, \\operatorname{arsinh}, \\cdot).
+5. If the user requests an explanation, plain text must be clearly separated from KaTeX blocks to prevent rendering errors on the frontend.
+6. Pure formula fields (e.g. problemStatementLatex, finalAnswerLatex, latexFormula, latexMath) must contain clean KaTeX notation without outer delimiters.
+
 Explain WHY each method is selected, show every algebraic manipulation clearly, verify the result (e.g. by differentiation or limit checks), and highlight common pitfalls students face.
 Always output pure valid JSON matching the requested schema.`;
 
-// Helper to format language instruction
+// Helper to format language instruction with strict KaTeX rules
 function getLanguageInstruction(lang?: string): string {
+  const katexMandate = 'STRICT KATEX COMPLIANCE: 1. Do NOT use standard [ ... ] or $ ... $. 2. For standalone centered formula blocks use strictly $$ katex_code $$. 3. For inline formulas use strictly \\( katex_code \\). 4. Use valid KaTeX functions (\\int, \\frac{}{}, \\sqrt{}, \\ln, \\arctan). 5. Clearly separate plain text from KaTeX blocks.';
   switch (lang) {
     case 'es':
-      return 'IMPORTANT: Write ALL pedagogical explanations, step titles, theory descriptions, method justifications, verification notes, and common student pitfalls in fluent, natural Spanish (Español Latinoamericano). Maintain all mathematical notation strictly in standard LaTeX ($...$).';
+      return `IMPORTANT: Write ALL pedagogical explanations, step titles, theory descriptions, method justifications, verification notes, and common student pitfalls in fluent, natural Spanish (Español Latinoamericano). ${katexMandate}`;
     case 'pt':
-      return 'IMPORTANT: Write ALL pedagogical explanations, step titles, theory descriptions, method justifications, verification notes, and common student pitfalls in fluent, natural Portuguese (Português). Maintain all mathematical notation strictly in standard LaTeX ($...$).';
+      return `IMPORTANT: Write ALL pedagogical explanations, step titles, theory descriptions, method justifications, verification notes, and common student pitfalls in fluent, natural Portuguese (Português). ${katexMandate}`;
     case 'fr':
-      return 'IMPORTANT: Write ALL pedagogical explanations, step titles, theory descriptions, method justifications, verification notes, and common student pitfalls in fluent, natural French (Français). Maintain all mathematical notation strictly in standard LaTeX ($...$).';
+      return `IMPORTANT: Write ALL pedagogical explanations, step titles, theory descriptions, method justifications, verification notes, and common student pitfalls in fluent, natural French (Français). ${katexMandate}`;
     case 'en':
     default:
-      return 'IMPORTANT: Write ALL pedagogical explanations, step titles, theory descriptions, method justifications, verification notes, and common student pitfalls in clear English. Maintain all mathematical notation strictly in standard LaTeX ($...$).';
+      return `IMPORTANT: Write ALL pedagogical explanations, step titles, theory descriptions, method justifications, verification notes, and common student pitfalls in clear English. ${katexMandate}`;
   }
+}
+
+/**
+ * Normalizes text to strictly follow KaTeX rules:
+ * - Standalone blocks enclosed in $$ ... $$
+ * - Inline formulas enclosed in \( ... \)
+ * - Eliminates legacy single $ and standard [ ... ]
+ * - Separates plain text from KaTeX blocks
+ */
+function normalizeToKatexFormat(text: string): string {
+  if (!text) return text;
+  let normalized = text;
+  // Convert \[ ... \] to $$ ... $$
+  normalized = normalized.replace(/\\\[([\s\S]*?)\\\]/g, '$$ $1 $$');
+  // Convert unescaped [ ... ] containing calculus macros to $$ ... $$
+  normalized = normalized.replace(/(^|\n)\[\s*(\\int|\\frac|\\sqrt|\\sum|\\lim|\\ln)[\s\S]*?\](?=\n|$)/g, (match) => {
+    return '$$ ' + match.trim().slice(1, -1).trim() + ' $$';
+  });
+  // Convert legacy single dollar $...$ to \( ... \)
+  normalized = normalized.replace(/(?<!\$)\$(?!\$)([^\$\n]+?)(?<!\$)\$(?!\$)/g, '\\( $1 \\)');
+  return normalized;
+}
+
+/**
+ * Normalizes raw mathematical formulas (strip outer delimiters if returned by model)
+ */
+function normalizeRawKatexFormula(formula: string): string {
+  if (!formula) return formula;
+  let clean = formula.trim();
+  if (clean.startsWith('$$') && clean.endsWith('$$')) {
+    clean = clean.slice(2, -2).trim();
+  } else if (clean.startsWith('\\[') && clean.endsWith('\\]')) {
+    clean = clean.slice(2, -2).trim();
+  } else if (clean.startsWith('\\(') && clean.endsWith('\\)')) {
+    clean = clean.slice(2, -2).trim();
+  } else if (clean.startsWith('$') && clean.endsWith('$')) {
+    clean = clean.slice(1, -1).trim();
+  } else if (clean.startsWith('[') && clean.endsWith(']') && clean.includes('\\')) {
+    clean = clean.slice(1, -1).trim();
+  }
+  return clean;
 }
 
 // API endpoint to solve an integral problem
@@ -226,6 +312,44 @@ Ensure you:
     }
 
     const parsed = JSON.parse(text);
+
+    // Enforce KaTeX compatibility formatting on all response fields
+    if (parsed.problemStatementLatex) {
+      parsed.problemStatementLatex = normalizeRawKatexFormula(parsed.problemStatementLatex);
+    }
+    if (parsed.finalAnswerLatex) {
+      parsed.finalAnswerLatex = normalizeRawKatexFormula(parsed.finalAnswerLatex);
+    }
+    if (parsed.methodJustification) {
+      parsed.methodJustification = normalizeToKatexFormat(parsed.methodJustification);
+    }
+    if (Array.isArray(parsed.theoryAndFormulas)) {
+      parsed.theoryAndFormulas.forEach((item: any) => {
+        if (item.latexFormula) item.latexFormula = normalizeRawKatexFormula(item.latexFormula);
+        if (item.explanation) item.explanation = normalizeToKatexFormat(item.explanation);
+      });
+    }
+    if (Array.isArray(parsed.steps)) {
+      parsed.steps.forEach((step: any) => {
+        if (step.latexMath) step.latexMath = normalizeRawKatexFormula(step.latexMath);
+        if (step.explanation) step.explanation = normalizeToKatexFormat(step.explanation);
+        if (Array.isArray(step.sideCalculations)) {
+          step.sideCalculations = step.sideCalculations.map((c: string) => normalizeToKatexFormat(c));
+        }
+      });
+    }
+    if (parsed.verification) {
+      if (parsed.verification.latexMath) {
+        parsed.verification.latexMath = normalizeRawKatexFormula(parsed.verification.latexMath);
+      }
+      if (parsed.verification.explanation) {
+        parsed.verification.explanation = normalizeToKatexFormat(parsed.verification.explanation);
+      }
+    }
+    if (Array.isArray(parsed.commonPitfalls)) {
+      parsed.commonPitfalls = parsed.commonPitfalls.map((p: string) => normalizeToKatexFormat(p));
+    }
+
     return res.json({ success: true, data: parsed });
   } catch (error: any) {
     console.error('Error solving integral:', error);
@@ -325,6 +449,27 @@ Provide:
     }
 
     const parsed = JSON.parse(text);
+
+    // Enforce KaTeX compatibility formatting on all response fields
+    if (parsed.problemLatex) {
+      parsed.problemLatex = normalizeRawKatexFormula(parsed.problemLatex);
+    }
+    if (parsed.finalAnswerLatex) {
+      parsed.finalAnswerLatex = normalizeRawKatexFormula(parsed.finalAnswerLatex);
+    }
+    if (parsed.hint1) {
+      parsed.hint1 = normalizeToKatexFormat(parsed.hint1);
+    }
+    if (parsed.hint2) {
+      parsed.hint2 = normalizeToKatexFormat(parsed.hint2);
+    }
+    if (Array.isArray(parsed.solutionSteps)) {
+      parsed.solutionSteps.forEach((step: any) => {
+        if (step.latexMath) step.latexMath = normalizeRawKatexFormula(step.latexMath);
+        if (step.explanation) step.explanation = normalizeToKatexFormat(step.explanation);
+      });
+    }
+
     return res.json({ success: true, data: parsed });
   } catch (error: any) {
     console.error('Error generating practice problem:', error);

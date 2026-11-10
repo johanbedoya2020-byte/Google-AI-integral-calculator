@@ -2,7 +2,7 @@ import { SupportedLanguage } from '../i18n/translations';
 import { CuratedExample, PracticeProblem, TopicCategory } from '../types/calculus';
 import { TopicInfo } from './curriculumData';
 
-export const LOCALIZED_TOPIC_CURRICULUM: Record<SupportedLanguage, Record<TopicCategory, TopicInfo>> = {
+export const LOCALIZED_TOPIC_CURRICULUM: Record<SupportedLanguage, Partial<Record<TopicCategory, TopicInfo>>> = {
   en: {
     numerical_methods: {
       id: 'numerical_methods',
@@ -148,6 +148,195 @@ export const LOCALIZED_TOPIC_CURRICULUM: Record<SupportedLanguage, Record<TopicC
       ],
       overview:
         'Integration by parts reverses the product rule for differentiation. When integrating the product of two disparate function types, LIATE guides the selection of u (to be differentiated) and dv (to be integrated), simplifying the problem into a manageable antiderivative.',
+    },
+    irrational_functions: {
+      id: 'irrational_functions',
+      title: 'Irrational Functions',
+      badge: 'Algebraic Radicals',
+      summary: 'Rationalizing radical integrands, roots of linear binomials u = ⁿ√(ax+b), and Chebyshev binomial differentials.',
+      subtopics: [
+        'Radical substitution u = ⁿ√(ax+b) to eliminate roots',
+        'Chebyshev conditions for integrating xᵐ(a + bxⁿ)ᵖ',
+        'Euler substitutions for √(ax² + bx + c)',
+        'Fractional exponent rationalization',
+      ],
+      keyFormulas: [
+        { name: 'Linear Root Substitution', latex: 'u = \\sqrt[n]{ax + b} \\implies u^n = ax + b, \\quad dx = \\frac{n u^{n-1}}{a} du' },
+        { name: 'Chebyshev Condition 1 (p integer)', latex: 'p \\in \\mathbb{Z} \\implies x = u^k \\quad (k = \\text{lcm of root indices})' },
+        { name: 'Chebyshev Condition 2', latex: '\\frac{m+1}{n} \\in \\mathbb{Z} \\implies a + bx^n = u^s' },
+      ],
+      overview:
+        'Integrals containing radical roots cannot generally be integrated in elementary terms unless transformed into rational functions of u through algebraic rationalizing substitutions.',
+    },
+    trig_integrals: {
+      id: 'trig_integrals',
+      title: 'Trigonometric Integration',
+      badge: 'Trig Identities',
+      summary: 'Powers and products of sine, cosine, secant, and tangent using Pythagorean and half-angle reductions.',
+      subtopics: [
+        'Products of odd and even powers: ∫ sinᵐ(x) cosⁿ(x) dx',
+        'Tangent and Secant integrals: ∫ tanᵐ(x) secⁿ(x) dx',
+        'Half-Angle power reduction identities',
+        'Product-to-sum trigonometric conversions',
+      ],
+      keyFormulas: [
+        { name: 'Pythagorean Identity', latex: '\\sin^2(x) + \\cos^2(x) = 1, \\quad \\tan^2(x) + 1 = \\sec^2(x)' },
+        { name: 'Half-Angle Reduction', latex: '\\sin^2(x) = \\frac{1 - \\cos(2x)}{2}, \\quad \\cos^2(x) = \\frac{1 + \\cos(2x)}{2}' },
+        { name: 'Product to Sum', latex: '\\sin(A)\\cos(B) = \\frac{1}{2}[\\sin(A-B) + \\sin(A+B)]' },
+      ],
+      overview:
+        'Trigonometric integration transforms powers and combinations of trigonometric functions using algebraic substitutions paired with fundamental trigonometric identities.',
+    },
+    trig_substitution: {
+      id: 'trig_substitution',
+      title: 'Trigonometric Substitution',
+      badge: 'Right Triangles',
+      summary: 'Eliminating square roots of quadratic forms a² - x², a² + x², and x² - a² via geometric right triangle substitutions.',
+      subtopics: [
+        'Form √(a² - x²): Substitute x = a sin(θ)',
+        'Form √(a² + x²): Substitute x = a tan(θ)',
+        'Form √(x² - a²): Substitute x = a sec(θ)',
+        'Reference right triangles for back-substitution',
+      ],
+      keyFormulas: [
+        { name: 'Sine Substitution', latex: '\\sqrt{a^2 - x^2} \\xrightarrow{x = a\\sin\\theta} a\\cos\\theta, \\quad dx = a\\cos\\theta\\,d\\theta' },
+        { name: 'Tangent Substitution', latex: '\\sqrt{a^2 + x^2} \\xrightarrow{x = a\\tan\\theta} a\\sec\\theta, \\quad dx = a\\sec^2\\theta\\,d\\theta' },
+        { name: 'Secant Substitution', latex: '\\sqrt{x^2 - a^2} \\xrightarrow{x = a\\sec\\theta} a\\tan\\theta, \\quad dx = a\\sec\\theta\\tan\\theta\\,d\\theta' },
+      ],
+      overview:
+        'Trigonometric substitution leverages Pythagorean trigonometric identities to collapse binomial radical expressions into single terms, converting intractable algebraic roots into easily integrable trigonometric powers.',
+    },
+    universal_substitution: {
+      id: 'universal_substitution',
+      title: 'The Universal Substitution',
+      badge: 'Weierstrass t = tan(x/2)',
+      summary: 'The Weierstrass half-angle substitution t = tan(x/2) that rationalizes ANY rational trigonometric function.',
+      subtopics: [
+        'Definition of half-angle variable t = tan(x/2)',
+        'Derivation of sin(x) and cos(x) in terms of t',
+        'Differential relationship dx = 2 dt / (1 + t²)',
+        'Decomposition into partial fractions in t',
+      ],
+      keyFormulas: [
+        { name: 'Weierstrass Parameter', latex: 't = \\tan\\left(\\frac{x}{2}\\right), \\quad dx = \\frac{2\\,dt}{1 + t^2}' },
+        { name: 'Sine Representation', latex: '\\sin(x) = \\frac{2t}{1 + t^2}' },
+        { name: 'Cosine Representation', latex: '\\cos(x) = \\frac{1 - t^2}{1 + t^2}' },
+      ],
+      overview:
+        'Known as the "world\'s sneakiest substitution," Weierstrass substitution systematically converts any rational expression of trigonometric functions into a purely algebraic rational function of t.',
+    },
+    integral_applications: {
+      id: 'integral_applications',
+      title: 'Applications of the Integral',
+      badge: 'Geometry & Physics',
+      summary: 'Area between curves, work done by variable force, hydrostatic fluid pressure, and centers of mass.',
+      subtopics: [
+        'Area between intersecting curves: ∫ [f(x) - g(x)] dx',
+        'Work done stretching springs and pumping fluids',
+        'Hydrostatic force and fluid pressure on submerged plates',
+        'Center of mass and Pappus’s Centroid Theorem',
+      ],
+      keyFormulas: [
+        { name: 'Area Between Curves', latex: 'A = \\int_a^b [f(x) - g(x)]\\,dx \\quad (f(x) \\ge g(x))' },
+        { name: 'Work (Hooke’s Law)', latex: 'W = \\int_a^b F(x)\\,dx = \\int_a^b k x\\,dx' },
+        { name: 'Centroid Coordinates', latex: '\\bar{x} = \\frac{1}{A}\\int_a^b x[f(x)-g(x)]dx, \\quad \\bar{y} = \\frac{1}{2A}\\int_a^b [f(x)^2 - g(x)^2]dx' },
+      ],
+      overview:
+        'Integration calculates macroscopic physical and geometric quantities by accumulating infinitesimal differential elements across physical continua.',
+    },
+    solids_revolution: {
+      id: 'solids_revolution',
+      title: 'Solids of Revolution',
+      badge: 'Disks & Washers',
+      summary: 'Volume of 3D solids formed by rotating plane regions around axes using circular disks and hollow washers.',
+      subtopics: [
+        'Disk Method (solid without internal hole)',
+        'Washer Method (hollow core with inner/outer radius)',
+        'Revolving around arbitrary horizontal lines y = k',
+        'Revolving around arbitrary vertical lines x = k',
+      ],
+      keyFormulas: [
+        { name: 'Disk Method', latex: 'V = \\pi \\int_a^b [R(x)]^2\\,dx' },
+        { name: 'Washer Method', latex: 'V = \\pi \\int_a^b \\left([R(x)]^2 - [r(x)]^2\\right)dx' },
+        { name: 'Revolution around y = k', latex: 'V = \\pi \\int_a^b \\left([f(x) - k]^2 - [g(x) - k]^2\\right)dx' },
+      ],
+      overview:
+        'Rotating a 2D region bounded by continuous curves around a fixed axis generates a 3D solid of revolution whose volume is evaluated by summing circular slices.',
+    },
+    cylindrical_shells: {
+      id: 'cylindrical_shells',
+      title: 'Cylindrical Shells',
+      badge: 'Unrolled Cylinders',
+      summary: 'Computing 3D volumes using concentric cylindrical shells parallel to the axis of revolution.',
+      subtopics: [
+        'Shell volume formula: V = 2π ∫ (radius)(height) dx',
+        'Revolving around y-axis without inverting functions',
+        'Revolving around shifted axes x = k',
+        'Comparing Shells vs. Washers efficiency',
+      ],
+      keyFormulas: [
+        { name: 'Shell Method (y-axis)', latex: 'V = 2\\pi \\int_a^b x [f(x) - g(x)]\\,dx' },
+        { name: 'Shell Method (x = k)', latex: 'V = 2\\pi \\int_a^b |x - k| [f(x) - g(x)]\\,dx' },
+        { name: 'Unrolled Shell Volume', latex: 'dV = 2\\pi r \\cdot h \\cdot dx' },
+      ],
+      overview:
+        'The cylindrical shell method partitions the solid into concentric cylinders concentric with the axis of revolution, often avoiding the need to invert complex functions y = f(x).',
+    },
+    cross_sections: {
+      id: 'cross_sections',
+      title: 'Known Cross-Sections',
+      badge: 'General Slicing',
+      summary: 'Cavalieri’s principle: volume of solids with base bounded by curves and known cross-sectional polygons.',
+      subtopics: [
+        'General Slicing Formula: V = ∫ A(x) dx',
+        'Square cross-sections: A(x) = s²',
+        'Semicircular cross-sections: A(x) = π/8 s²',
+        'Equilateral triangle cross-sections: A(x) = √3/4 s²',
+      ],
+      keyFormulas: [
+        { name: 'General Volume', latex: 'V = \\int_a^b A(x)\\,dx' },
+        { name: 'Square Cross-Section', latex: 'A(x) = [f(x) - g(x)]^2' },
+        { name: 'Semicircular Cross-Section', latex: 'A(x) = \\frac{\\pi}{8} [f(x) - g(x)]^2' },
+        { name: 'Equilateral Triangle', latex: 'A(x) = \\frac{\\sqrt{3}}{4} [f(x) - g(x)]^2' },
+      ],
+      overview:
+        'If the cross-sectional area A(x) perpendicular to an axis is known at every point, the volume is obtained by integrating A(x) over the interval [a, b].',
+    },
+    arc_length: {
+      id: 'arc_length',
+      title: 'Arc Length of Curves',
+      badge: 'Curvilinear Length',
+      summary: 'Exact rectilinear distance along a continuous curve y = f(x) derived from infinitesimal Pythagorean differentials.',
+      subtopics: [
+        'Differential arc element ds = √(dx² + dy²)',
+        'Cartesian Arc Length formula: L = ∫ √(1 + [f\'(x)]²)',
+        'Catenaries, parabolas, and circular arcs',
+        'Approximating smooth curves with secant polygons',
+      ],
+      keyFormulas: [
+        { name: 'Differential Element', latex: 'ds = \\sqrt{1 + \\left(\\frac{dy}{dx}\\right)^2} dx' },
+        { name: 'Arc Length Formula', latex: 'L = \\int_a^b \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+      ],
+      overview:
+        'The arc length of a smooth plane curve represents the limit of the sum of secant line segment lengths as the partition norm approaches zero.',
+    },
+    surface_area: {
+      id: 'surface_area',
+      title: 'Surface Area of Revolution',
+      badge: 'Frustum Ribbons',
+      summary: 'Surface area of 3D solids of revolution obtained by revolving continuous curves around axes.',
+      subtopics: [
+        'Differential surface ribbon: dS = 2π r ds',
+        'Revolution around x-axis: S = 2π ∫ y √(1 + [y\']²) dx',
+        'Revolution around y-axis: S = 2π ∫ x √(1 + [y\']²) dx',
+        'Gabriel’s Horn paradox (finite volume, infinite area)',
+      ],
+      keyFormulas: [
+        { name: 'Surface (x-axis)', latex: 'S = 2\\pi \\int_a^b |f(x)| \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+        { name: 'Surface (y-axis)', latex: 'S = 2\\pi \\int_a^b |x| \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+      ],
+      overview:
+        'Rotating a planar arc of length ds around an axis traces out a thin conical frustum ribbon of area 2π r ds, integrating to the total surface area.',
     },
   },
 
@@ -297,6 +486,195 @@ export const LOCALIZED_TOPIC_CURRICULUM: Record<SupportedLanguage, Record<TopicC
       overview:
         'La integración por partes revierte la regla del producto de la derivación. Al integrar el producto de dos tipos de funciones dispares, la jerarquía LIATE guía la elección de u (para derivar) y dv (para integrar), simplificando el problema a una integral elemental.',
     },
+    irrational_functions: {
+      id: 'irrational_functions',
+      title: 'Funciones Irracionales',
+      badge: 'Radicales Algebraicos',
+      summary: 'Racionalización de integrandos con raíces u = ⁿ√(ax+b), diferenciales binomias y condiciones de Chebyshev.',
+      subtopics: [
+        'Sustitución radical u = ⁿ√(ax+b) para eliminar raíces',
+        'Condiciones de Chebyshev para integrar xᵐ(a + bxⁿ)ᵖ',
+        'Sustituciones de Euler para √(ax² + bx + c)',
+        'Racionalización de exponentes fraccionarios',
+      ],
+      keyFormulas: [
+        { name: 'Sustitución de Raíz Lineal', latex: 'u = \\sqrt[n]{ax + b} \\implies u^n = ax + b, \\quad dx = \\frac{n u^{n-1}}{a} du' },
+        { name: 'Condición de Chebyshev 1 (p entero)', latex: 'p \\in \\mathbb{Z} \\implies x = u^k \\quad (k = \\text{mcm de índices})' },
+        { name: 'Condición de Chebyshev 2', latex: '\\frac{m+1}{n} \\in \\mathbb{Z} \\implies a + bx^n = u^s' },
+      ],
+      overview:
+        'Las integrales con expresiones radicales se transforman en funciones racionales de u mediante sustituciones algebraicas que eliminan las raíces.',
+    },
+    trig_integrals: {
+      id: 'trig_integrals',
+      title: 'Integración Trigonométrica',
+      badge: 'Identidades Trig.',
+      summary: 'Productos y potencias de senos, cosenos, secantes y tangentes mediante identidades pitagóricas y del ángulo mitad.',
+      subtopics: [
+        'Potencias pares e impares: ∫ senᵐ(x) cosⁿ(x) dx',
+        'Integrales de tangentes y secantes: ∫ tgᵐ(x) secⁿ(x) dx',
+        'Identidades de reducción del ángulo mitad',
+        'Conversiones de producto a suma',
+      ],
+      keyFormulas: [
+        { name: 'Identidad Pitagórica', latex: '\\sin^2(x) + \\cos^2(x) = 1, \\quad \\tan^2(x) + 1 = \\sec^2(x)' },
+        { name: 'Ángulo Mitad (Reducción)', latex: '\\sin^2(x) = \\frac{1 - \\cos(2x)}{2}, \\quad \\cos^2(x) = \\frac{1 + \\cos(2x)}{2}' },
+        { name: 'Producto a Suma', latex: '\\sin(A)\\cos(B) = \\frac{1}{2}[\\sin(A-B) + \\sin(A+B)]' },
+      ],
+      overview:
+        'La integración trigonométrica simplifica potencias y productos de funciones trigonométricas empleando identidades algebraicas y sustituciones directas.',
+    },
+    trig_substitution: {
+      id: 'trig_substitution',
+      title: 'Sustitución Trigonométrica',
+      badge: 'Triángulos Rectángulos',
+      summary: 'Eliminación de radicales cuadráticos a² - x², a² + x² y x² - a² mediante triángulos rectángulos geométricos.',
+      subtopics: [
+        'Forma √(a² - x²): Sustituir x = a sen(θ)',
+        'Forma √(a² + x²): Sustituir x = a tan(θ)',
+        'Forma √(x² - a²): Sustituir x = a sec(θ)',
+        'Triángulo rectángulo de referencia para regresar a x',
+      ],
+      keyFormulas: [
+        { name: 'Sustitución con Seno', latex: '\\sqrt{a^2 - x^2} \\xrightarrow{x = a\\sin\\theta} a\\cos\\theta, \\quad dx = a\\cos\\theta\\,d\\theta' },
+        { name: 'Sustitución con Tangente', latex: '\\sqrt{a^2 + x^2} \\xrightarrow{x = a\\tan\\theta} a\\sec\\theta, \\quad dx = a\\sec^2\\theta\\,d\\theta' },
+        { name: 'Sustitución con Secante', latex: '\\sqrt{x^2 - a^2} \\xrightarrow{x = a\\sec\\theta} a\\tan\\theta, \\quad dx = a\\sec\\theta\\tan\\theta\\,d\\theta' },
+      ],
+      overview:
+        'Aprovecha las identidades pitagóricas para convertir binomios bajo radicales en un único término trigonométrico fácilmente integrable.',
+    },
+    universal_substitution: {
+      id: 'universal_substitution',
+      title: 'Sustitución Universal',
+      badge: 'Weierstrass t = tan(x/2)',
+      summary: 'La sustitución de Weierstrass t = tan(x/2) que convierte cualquier función racional trigonométrica en racional algebraica.',
+      subtopics: [
+        'Definición de la variable de ángulo mitad t = tan(x/2)',
+        'Deducción de sen(x) y cos(x) en términos de t',
+        'Diferencial dx = 2 dt / (1 + t²)',
+        'Fracciones parciales en la variable t',
+      ],
+      keyFormulas: [
+        { name: 'Parámetro de Weierstrass', latex: 't = \\tan\\left(\\frac{x}{2}\\right), \\quad dx = \\frac{2\\,dt}{1 + t^2}' },
+        { name: 'Sustitución de Seno', latex: '\\sin(x) = \\frac{2t}{1 + t^2}' },
+        { name: 'Sustitución de Coseno', latex: '\\cos(x) = \\frac{1 - t^2}{1 + t^2}' },
+      ],
+      overview:
+        'Conocida como el método maestro de Weierstrass, permite integrar cualquier cociente racional de funciones trigonométricas al transformarlo en una fracción algebraica en t.',
+    },
+    integral_applications: {
+      id: 'integral_applications',
+      title: 'Aplicaciones de la Integral',
+      badge: 'Geometría y Física',
+      summary: 'Área entre curvas, trabajo mecánico por fuerza variable, presión hidrostática y centros de masa.',
+      subtopics: [
+        'Área entre curvas intersecantes: ∫ [f(x) - g(x)] dx',
+        'Trabajo realizado al estirar resortes y bombear fluidos',
+        'Fuerza y presión hidrostática sobre placas sumergidas',
+        'Centro de masa y Teorema del Centroide de Pappus',
+      ],
+      keyFormulas: [
+        { name: 'Área Entre Curvas', latex: 'A = \\int_a^b [f(x) - g(x)]\\,dx \\quad (f(x) \\ge g(x))' },
+        { name: 'Trabajo (Ley de Hooke)', latex: 'W = \\int_a^b F(x)\\,dx = \\int_a^b k x\\,dx' },
+        { name: 'Coordenadas del Centroide', latex: '\\bar{x} = \\frac{1}{A}\\int_a^b x[f(x)-g(x)]dx, \\quad \\bar{y} = \\frac{1}{2A}\\int_a^b [f(x)^2 - g(x)^2]dx' },
+      ],
+      overview:
+        'La integración calcula cantidades físicas y geométricas acumulando elementos diferenciales continuos.',
+    },
+    solids_revolution: {
+      id: 'solids_revolution',
+      title: 'Sólidos de Revolución',
+      badge: 'Discos y Arandelas',
+      summary: 'Volumen de cuerpos 3D generados al girar regiones planas alrededor de ejes mediante discos circulares y arandelas.',
+      subtopics: [
+        'Método de los Discos (sólidos sin orificio interior)',
+        'Método de las Arandelas (núcleo hueco con radios R y r)',
+        'Revolución respecto a líneas horizontales y = k',
+        'Revolución respecto a líneas verticales x = k',
+      ],
+      keyFormulas: [
+        { name: 'Método de Discos', latex: 'V = \\pi \\int_a^b [R(x)]^2\\,dx' },
+        { name: 'Método de Arandelas', latex: 'V = \\pi \\int_a^b \\left([R(x)]^2 - [r(x)]^2\\right)dx' },
+        { name: 'Giro alrededor de y = k', latex: 'V = \\pi \\int_a^b \\left([f(x) - k]^2 - [g(x) - k]^2\\right)dx' },
+      ],
+      overview:
+        'Al rotar una región bidimensional en el espacio se produce un sólido 3D cuyo volumen se calcula sumando rebanadas circulares infinitesimales.',
+    },
+    cylindrical_shells: {
+      id: 'cylindrical_shells',
+      title: 'Casquetes Cilíndricos',
+      badge: 'Cilindros Desenrollados',
+      summary: 'Cálculo de volúmenes 3D mediante cilindros concéntricos paralelos al eje de giro.',
+      subtopics: [
+        'Fórmula de casquetes: V = 2π ∫ (radio)(altura) dx',
+        'Rotación sobre el eje y sin despejar x en función de y',
+        'Ejes de giro desplazados x = k',
+        'Comparación de eficiencia entre Casquetes y Arandelas',
+      ],
+      keyFormulas: [
+        { name: 'Método de Casquetes (eje y)', latex: 'V = 2\\pi \\int_a^b x [f(x) - g(x)]\\,dx' },
+        { name: 'Casquetes con eje x = k', latex: 'V = 2\\pi \\int_a^b |x - k| [f(x) - g(x)]\\,dx' },
+        { name: 'Volumen del Casquete Desenrollado', latex: 'dV = 2\\pi r \\cdot h \\cdot dx' },
+      ],
+      overview:
+        'Descompone el sólido en tubos cilíndricos concéntricos con el eje de rotación, evitando despejar funciones inversas complejas.',
+    },
+    cross_sections: {
+      id: 'cross_sections',
+      title: 'Secciones Transversales',
+      badge: 'Rebanadas Generales',
+      summary: 'Principio de Cavalieri: volumen de sólidos con base en el plano xy y secciones poligonales conocidas.',
+      subtopics: [
+        'Fórmula General de Rebanadas: V = ∫ A(x) dx',
+        'Secciones transversales cuadradas: A(x) = s²',
+        'Secciones semicirculares: A(x) = π/8 s²',
+        'Secciones triangulares equiláteras: A(x) = √3/4 s²',
+      ],
+      keyFormulas: [
+        { name: 'Volumen General', latex: 'V = \\int_a^b A(x)\\,dx' },
+        { name: 'Sección Cuadrada', latex: 'A(x) = [f(x) - g(x)]^2' },
+        { name: 'Sección Semicircular', latex: 'A(x) = \\frac{\\pi}{8} [f(x) - g(x)]^2' },
+        { name: 'Triángulo Equilátero', latex: 'A(x) = \\frac{\\sqrt{3}}{4} [f(x) - g(x)]^2' },
+      ],
+      overview:
+        'Si el área de la sección transversal A(x) perpendicular a un eje se conoce en cada punto, el volumen se obtiene integrando A(x) en el intervalo [a, b].',
+    },
+    arc_length: {
+      id: 'arc_length',
+      title: 'Longitud de Arco',
+      badge: 'Distancia Curvilínea',
+      summary: 'Longitud rectilínea exacta a lo largo de una curva continua y = f(x) deducida de diferenciales pitagóricos.',
+      subtopics: [
+        'Elemento de arco diferencial ds = √(dx² + dy²)',
+        'Fórmula cartesiana de longitud: L = ∫ √(1 + [f\'(x)]²)',
+        'Catenarias, parábolas y arcos de circunferencia',
+        'Aproximación por poligonales secantes',
+      ],
+      keyFormulas: [
+        { name: 'Elemento Diferencial', latex: 'ds = \\sqrt{1 + \\left(\\frac{dy}{dx}\\right)^2} dx' },
+        { name: 'Fórmula de Longitud de Arco', latex: 'L = \\int_a^b \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+      ],
+      overview:
+        'La longitud de arco de una curva suave es el límite de la suma de cuerdas secantes conforme la norma de la partición tiende a cero.',
+    },
+    surface_area: {
+      id: 'surface_area',
+      title: 'Área de Superficie de Revolución',
+      badge: 'Franjas Cónicas',
+      summary: 'Área superficial de sólidos 3D formados al girar curvas en torno a ejes de rotación.',
+      subtopics: [
+        'Cinta diferencial de superficie: dS = 2π r ds',
+        'Rotación sobre eje x: S = 2π ∫ y √(1 + [y\']²) dx',
+        'Rotación sobre eje y: S = 2π ∫ x √(1 + [y\']²) dx',
+        'Paradoja de la Trompeta de Gabriel (volumen finito, área infinita)',
+      ],
+      keyFormulas: [
+        { name: 'Superficie (eje x)', latex: 'S = 2\\pi \\int_a^b |f(x)| \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+        { name: 'Superficie (eje y)', latex: 'S = 2\\pi \\int_a^b |x| \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+      ],
+      overview:
+        'Al rotar un arco de curva ds alrededor de un eje se barre una franja de tronco de cono de área 2π r ds, cuya suma continua da el área de superficie total.',
+    },
   },
 
   pt: {
@@ -445,6 +823,195 @@ export const LOCALIZED_TOPIC_CURRICULUM: Record<SupportedLanguage, Record<TopicC
       overview:
         'A integração por partes inverte a regra do produto da diferenciação. Quando integramos o produto de funções distintas, a regra LIATE orienta a escolha de u (para derivar) e dv (para integrar).',
     },
+    irrational_functions: {
+      id: 'irrational_functions',
+      title: 'Funções Irracionais',
+      badge: 'Radicais Algébricos',
+      summary: 'Racionalização de integrandos com raízes, raízes de binômios lineares u = ⁿ√(ax+b) e diferenciais binômias de Chebyshev.',
+      subtopics: [
+        'Substituição de radicais u = ⁿ√(ax+b) para eliminar raízes',
+        'Condições de Chebyshev para integração de xᵐ(a + bxⁿ)ᵖ',
+        'Substituições de Euler para √(ax² + bx + c)',
+        'Racionalização de expoentes fracionários',
+      ],
+      keyFormulas: [
+        { name: 'Substituição de Raiz Linear', latex: 'u = \\sqrt[n]{ax + b} \\implies u^n = ax + b, \\quad dx = \\frac{n u^{n-1}}{a} du' },
+        { name: 'Condição 1 de Chebyshev (p inteiro)', latex: 'p \\in \\mathbb{Z} \\implies x = u^k \\quad (k = \\text{mmc dos índices dos radicais})' },
+        { name: 'Condição 2 de Chebyshev', latex: '\\frac{m+1}{n} \\in \\mathbb{Z} \\implies a + bx^n = u^s' },
+      ],
+      overview:
+        'Integrais contendo radicais não são, em geral, elementares a menos que transformadas em funções racionais em u por meio de substituições racionalizadoras apropriadas.',
+    },
+    trig_integrals: {
+      id: 'trig_integrals',
+      title: 'Integração Trigonométrica',
+      badge: 'Identidades Trigonométricas',
+      summary: 'Potências e produtos de seno, cosseno, secante e tangente utilizando identidades pitagóricas e fórmulas de arco metade.',
+      subtopics: [
+        'Produtos de potências pares e ímpares: ∫ sinᵐ(x) cosⁿ(x) dx',
+        'Integrais de potências de tangente e secante: ∫ tanᵐ(x) secⁿ(x) dx',
+        'Fórmulas de redução de potência por arco metade',
+        'Transformações de produto em soma',
+      ],
+      keyFormulas: [
+        { name: 'Identidade Pitagórica', latex: '\\sin^2(x) + \\cos^2(x) = 1, \\quad \\tan^2(x) + 1 = \\sec^2(x)' },
+        { name: 'Redução de Ângulo Metade', latex: '\\sin^2(x) = \\frac{1 - \\cos(2x)}{2}, \\quad \\cos^2(x) = \\frac{1 + \\cos(2x)}{2}' },
+        { name: 'Produto em Soma', latex: '\\sin(A)\\cos(B) = \\frac{1}{2}[\\sin(A-B) + \\sin(A+B)]' },
+      ],
+      overview:
+        'A integração trigonométrica transforma potências e combinações de funções circulares utilizando substituições algébricas associadas a identidades trigonométricas fundamentais.',
+    },
+    trig_substitution: {
+      id: 'trig_substitution',
+      title: 'Substituição Trigonométrica',
+      badge: 'Triângulos Retângulos',
+      summary: 'Eliminação de raízes de formas quadráticas a² - x², a² + x² e x² - a² via substituições geométricas em triângulos retângulos.',
+      subtopics: [
+        'Forma √(a² - x²): Substituir x = a sin(θ)',
+        'Forma √(a² + x²): Substituir x = a tan(θ)',
+        'Forma √(x² - a²): Substituir x = a sec(θ)',
+        'Triângulos de referência para retorno à variável original',
+      ],
+      keyFormulas: [
+        { name: 'Substituição por Seno', latex: '\\sqrt{a^2 - x^2} \\xrightarrow{x = a\\sin\\theta} a\\cos\\theta, \\quad dx = a\\cos\\theta\\,d\\theta' },
+        { name: 'Substituição por Tangente', latex: '\\sqrt{a^2 + x^2} \\xrightarrow{x = a\\tan\\theta} a\\sec\\theta, \\quad dx = a\\sec^2\\theta\\,d\\theta' },
+        { name: 'Substituição por Secante', latex: '\\sqrt{x^2 - a^2} \\xrightarrow{x = a\\sec\\theta} a\\tan\\theta, \\quad dx = a\\sec\\theta\\tan\\theta\\,d\\theta' },
+      ],
+      overview:
+        'A substituição trigonométrica emprega relações pitagóricas para recolher binômios sob radicais em monômios simples, permitindo a integração de raízes algébricas intrincadas.',
+    },
+    universal_substitution: {
+      id: 'universal_substitution',
+      title: 'Substituição Universal (Weierstrass)',
+      badge: 'Weierstrass t = tan(x/2)',
+      summary: 'A substituição pelo arco metade t = tan(x/2) que racionaliza QUALQUER fração racional de funções trigonométricas.',
+      subtopics: [
+        'Definição da variável do arco metade t = tan(x/2)',
+        'Dedução de sin(x) e cos(x) em função de t',
+        'Relação diferencial dx = 2 dt / (1 + t²)',
+        'Decomposição em frações parciais em t',
+      ],
+      keyFormulas: [
+        { name: 'Parâmetro de Weierstrass', latex: 't = \\tan\\left(\\frac{x}{2}\\right), \\quad dx = \\frac{2\\,dt}{1 + t^2}' },
+        { name: 'Seno em Função de t', latex: '\\sin(x) = \\frac{2t}{1 + t^2}' },
+        { name: 'Cosseno em Função de t', latex: '\\cos(x) = \\frac{1 - t^2}{1 + t^2}' },
+      ],
+      overview:
+        'Conhecida historicamente como a substituição mais engenhosa do cálculo, a transformação de Weierstrass converte sistematicamente qualquer expressão racional trigonométrica numa função racional puramente algébrica em t.',
+    },
+    integral_applications: {
+      id: 'integral_applications',
+      title: 'Aplicações da Integral',
+      badge: 'Geometria e Física',
+      summary: 'Área entre curvas, trabalho realizado por forças variáveis, pressão hidrostática de fluidos e centros de massa.',
+      subtopics: [
+        'Área entre curvas que se intersectam: ∫ [f(x) - g(x)] dx',
+        'Trabalho no alongamento de molas e bombeamento de fluidos',
+        'Força hidrostática e pressão de fluidos em placas submersas',
+        'Centro de massa e Teorema do Centróide de Pappus',
+      ],
+      keyFormulas: [
+        { name: 'Área entre Curvas', latex: 'A = \\int_a^b [f(x) - g(x)]\\,dx \\quad (f(x) \\ge g(x))' },
+        { name: 'Trabalho (Lei de Hooke)', latex: 'W = \\int_a^b F(x)\\,dx = \\int_a^b k x\\,dx' },
+        { name: 'Coordenadas do Centróide', latex: '\\bar{x} = \\frac{1}{A}\\int_a^b x[f(x)-g(x)]dx, \\quad \\bar{y} = \\frac{1}{2A}\\int_a^b [f(x)^2 - g(x)^2]dx' },
+      ],
+      overview:
+        'A integração calcula grandezas físicas e geométricas contínuas acumulando elementos diferenciais infinitesimais ao longo de um domínio.',
+    },
+    solids_revolution: {
+      id: 'solids_revolution',
+      title: 'Sólidos de Revolução',
+      badge: 'Discos e Arruelas',
+      summary: 'Cálculo do volume de sólidos 3D gerados pela rotação de regiões planas em torno de eixos usando discos circulares e arruelas.',
+      subtopics: [
+        'Método dos Discos (sólido maciço sem furo interno)',
+        'Método das Arruelas (núcleo oco com raios interno e externo)',
+        'Rotação em torno de retas horizontais arbitrárias y = k',
+        'Rotação em torno de retas verticais arbitrárias x = k',
+      ],
+      keyFormulas: [
+        { name: 'Método dos Discos', latex: 'V = \\pi \\int_a^b [R(x)]^2\\,dx' },
+        { name: 'Método das Arruelas', latex: 'V = \\pi \\int_a^b \\left([R(x)]^2 - [r(x)]^2\\right)dx' },
+        { name: 'Revolução em torno de y = k', latex: 'V = \\pi \\int_a^b \\left([f(x) - k]^2 - [g(x) - k]^2\\right)dx' },
+      ],
+      overview:
+        'Rotacionar uma região 2D delimitada por curvas contínuas em torno de um eixo fixo engendra um sólido 3D de revolução cujo volume é calculado somando fatias circulares infinitesimais.',
+    },
+    cylindrical_shells: {
+      id: 'cylindrical_shells',
+      title: 'Cascas Cilíndricas',
+      badge: 'Cilindros Planificados',
+      summary: 'Determinação de volumes 3D utilizando cascas cilíndricas concêntricas paralelas ao eixo de revolução.',
+      subtopics: [
+        'Fórmula do volume de cascas: V = 2π ∫ (raio)(altura) dx',
+        'Rotação em torno do eixo y sem necessidade de inversão de funções',
+        'Rotação em torno de eixos deslocados x = k',
+        'Comparação da eficiência entre Cascas e Arruelas',
+      ],
+      keyFormulas: [
+        { name: 'Método das Cascas (eixo y)', latex: 'V = 2\\pi \\int_a^b x [f(x) - g(x)]\\,dx' },
+        { name: 'Método das Cascas (x = k)', latex: 'V = 2\\pi \\int_a^b |x - k| [f(x) - g(x)]\\,dx' },
+        { name: 'Volume de Casca Planificada', latex: 'dV = 2\\pi r \\cdot h \\cdot dx' },
+      ],
+      overview:
+        'O método das cascas cilíndricas decompõe o sólido em cilindros concêntricos em torno do eixo de revolução, evitando frequentemente a inversão de funções complexas y = f(x).',
+    },
+    cross_sections: {
+      id: 'cross_sections',
+      title: 'Seções Transversais Conhecidas',
+      badge: 'Fatiamento Geral',
+      summary: 'Princípio de Cavalieri: volume de sólidos cuja base é limitada por curvas e cujas seções transversais possuem geometria conhecida.',
+      subtopics: [
+        'Fórmula Geral de Fatiamento: V = ∫ A(x) dx',
+        'Seções transversais quadradas: A(x) = s²',
+        'Seções transversais semicirculares: A(x) = π/8 s²',
+        'Seções transversais em triângulos equiláteros: A(x) = √3/4 s²',
+      ],
+      keyFormulas: [
+        { name: 'Volume Geral', latex: 'V = \\int_a^b A(x)\\,dx' },
+        { name: 'Seção Quadrada', latex: 'A(x) = [f(x) - g(x)]^2' },
+        { name: 'Seção Semicircular', latex: 'A(x) = \\frac{\\pi}{8} [f(x) - g(x)]^2' },
+        { name: 'Triângulo Equilátero', latex: 'A(x) = \\frac{\\sqrt{3}}{4} [f(x) - g(x)]^2' },
+      ],
+      overview:
+        'Se a área da seção transversal A(x) perpendicular a um eixo for conhecida em cada ponto, o volume total é obtido integrando A(x) no intervalo [a, b].',
+    },
+    arc_length: {
+      id: 'arc_length',
+      title: 'Comprimento de Arco de Curvas',
+      badge: 'Comprimento Curvilíneo',
+      summary: 'Distância retilínea exata ao longo de uma curva contínua y = f(x) deduzida a partir de diferenciais pitagóricos infinitesimais.',
+      subtopics: [
+        'Elemento de arco diferencial ds = √(dx² + dy²)',
+        'Fórmula cartesiana de comprimento de arco: L = ∫ √(1 + [f\'(x)]²)',
+        'Catenárias, parábolas e arcos de circunferência',
+        'Aproximação de curvas suaves por polígonos secantes',
+      ],
+      keyFormulas: [
+        { name: 'Elemento Diferencial', latex: 'ds = \\sqrt{1 + \\left(\\frac{dy}{dx}\\right)^2} dx' },
+        { name: 'Fórmula do Comprimento de Arco', latex: 'L = \\int_a^b \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+      ],
+      overview:
+        'O comprimento de arco de uma curva suave representa o limite da soma dos comprimentos dos segmentos secantes quando a norma da partição tende a zero.',
+    },
+    surface_area: {
+      id: 'surface_area',
+      title: 'Área de Superfície de Revolução',
+      badge: 'Faixas de Tronco de Cone',
+      summary: 'Área superficial de sólidos 3D gerados pela rotação de curvas contínuas em torno de eixos de revolução.',
+      subtopics: [
+        'Faixa diferencial de superfície: dS = 2π r ds',
+        'Revolução em torno do eixo x: S = 2π ∫ y √(1 + [y\']²) dx',
+        'Revolução em torno do eixo y: S = 2π ∫ x √(1 + [y\']²) dx',
+        'Paradoxo da Trombeta de Gabriel (volume finito, área infinita)',
+      ],
+      keyFormulas: [
+        { name: 'Superfície (eixo x)', latex: 'S = 2\\pi \\int_a^b |f(x)| \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+        { name: 'Superfície (eixo y)', latex: 'S = 2\\pi \\int_a^b |x| \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+      ],
+      overview:
+        'Ao girar um arco de curva ds em torno de um eixo, varre-se uma faixa de tronco de cone de área 2π r ds, cuja integral contínua fornece a área total de superfície.',
+    },
   },
 
   fr: {
@@ -592,6 +1159,195 @@ export const LOCALIZED_TOPIC_CURRICULUM: Record<SupportedLanguage, Record<TopicC
       ],
       overview:
         'L’intégration par parties découle de la dérivée d’un produit de deux fonctions. La règle ALPET / LIATE permet d’orienter le choix de la fonction à dériver (u) et de celle à intégrer (dv).',
+    },
+    irrational_functions: {
+      id: 'irrational_functions',
+      title: 'Fonctions Irrationnelles',
+      badge: 'Radicaux Algébriques',
+      summary: 'Rationalisation d’intégrales contenant des racines, racines de binômes linéaires u = ⁿ√(ax+b) et différentielles binômes de Tchebychev.',
+      subtopics: [
+        'Changement de variable u = ⁿ√(ax+b) pour éliminer les radicaux',
+        'Conditions de Tchebychev pour l’intégration de xᵐ(a + bxⁿ)ᵖ',
+        'Substitutions d’Euler pour √(ax² + bx + c)',
+        'Rationalisation d’exposants fractionnaires',
+      ],
+      keyFormulas: [
+        { name: 'Substitution de Racine Linéaire', latex: 'u = \\sqrt[n]{ax + b} \\implies u^n = ax + b, \\quad dx = \\frac{n u^{n-1}}{a} du' },
+        { name: 'Condition 1 de Tchebychev (p entier)', latex: 'p \\in \\mathbb{Z} \\implies x = u^k \\quad (k = \\text{ppcm des indices des racines})' },
+        { name: 'Condition 2 de Tchebychev', latex: '\\frac{m+1}{n} \\in \\mathbb{Z} \\implies a + bx^n = u^s' },
+      ],
+      overview:
+        'Les intégrales contenant des racines ne sont généralement pas intégrables au moyen de fonctions usuelles sans être transformées au préalable en fonctions rationnelles de u par des changements de variables rationalisants.',
+    },
+    trig_integrals: {
+      id: 'trig_integrals',
+      title: 'Intégration Trigonométrique',
+      badge: 'Identités Trigonométriques',
+      summary: 'Puissances et produits de sinus, cosinus, sécante et tangente à l’aide des identités pythagoriciennes et d’abaissement de degré.',
+      subtopics: [
+        'Produits de puissances paires et impaires : ∫ sinᵐ(x) cosⁿ(x) dx',
+        'Intégrales de tangente et de sécante : ∫ tanᵐ(x) secⁿ(x) dx',
+        'Formules de réduction de puissance par l’angle moitié',
+        'Formules de Simpson pour transformer les produits en sommes',
+      ],
+      keyFormulas: [
+        { name: 'Identité Pythagoricienne', latex: '\\sin^2(x) + \\cos^2(x) = 1, \\quad \\tan^2(x) + 1 = \\sec^2(x)' },
+        { name: 'Réduction par l’Angle Moitié', latex: '\\sin^2(x) = \\frac{1 - \\cos(2x)}{2}, \\quad \\cos^2(x) = \\frac{1 + \\cos(2x)}{2}' },
+        { name: 'Produit en Somme', latex: '\\sin(A)\\cos(B) = \\frac{1}{2}[\\sin(A-B) + \\sin(A+B)]' },
+      ],
+      overview:
+        'L’intégration trigonométrique simplifie les combinaisons de fonctions circulaires en combinant des changements de variable algébriques et les identités trigonométriques classiques.',
+    },
+    trig_substitution: {
+      id: 'trig_substitution',
+      title: 'Substitution Trigonométrique',
+      badge: 'Triangles Rectangles',
+      summary: 'Élimination des racines de formes quadratiques a² - x², a² + x² et x² - a² via des substitutions géométriques dans un triangle rectangle.',
+      subtopics: [
+        'Forme √(a² - x²) : Poser x = a sin(θ)',
+        'Forme √(a² + x²) : Poser x = a tan(θ)',
+        'Forme √(x² - a²) : Poser x = a sec(θ)',
+        'Triangle rectangle de référence pour le retour à la variable x',
+      ],
+      keyFormulas: [
+        { name: 'Substitution par Sinus', latex: '\\sqrt{a^2 - x^2} \\xrightarrow{x = a\\sin\\theta} a\\cos\\theta, \\quad dx = a\\cos\\theta\\,d\\theta' },
+        { name: 'Substitution par Tangente', latex: '\\sqrt{a^2 + x^2} \\xrightarrow{x = a\\tan\\theta} a\\sec\\theta, \\quad dx = a\\sec^2\\theta\\,d\\theta' },
+        { name: 'Substitution par Sécante', latex: '\\sqrt{x^2 - a^2} \\xrightarrow{x = a\\sec\\theta} a\\tan\\theta, \\quad dx = a\\sec\\theta\\tan\\theta\\,d\\theta' },
+      ],
+      overview:
+        'La substitution trigonométrique exploite les relations pythagoriciennes pour transformer un binôme sous un radical en un monôme trigonométrique directement intégrable.',
+    },
+    universal_substitution: {
+      id: 'universal_substitution',
+      title: 'Substitution Universelle (Weierstrass)',
+      badge: 'Weierstrass t = tan(x/2)',
+      summary: 'Le changement de variable universel par l’arc moitié t = tan(x/2) rationalisant TOUTE fraction rationnelle trigonométrique.',
+      subtopics: [
+        'Définition de la variable de l’arc moitié t = tan(x/2)',
+        'Expression de sin(x) et cos(x) en fonction de t',
+        'Relation différentielle dx = 2 dt / (1 + t²)',
+        'Décomposition en éléments simples en t',
+      ],
+      keyFormulas: [
+        { name: 'Paramètre de Weierstrass', latex: 't = \\tan\\left(\\frac{x}{2}\\right), \\quad dx = \\frac{2\\,dt}{1 + t^2}' },
+        { name: 'Sinus en Fonction de t', latex: '\\sin(x) = \\frac{2t}{1 + t^2}' },
+        { name: 'Cosinus en Fonction de t', latex: '\\cos(x) = \\frac{1 - t^2}{1 + t^2}' },
+      ],
+      overview:
+        'Qualifiée de "substitution la plus astucieuse du calcul", la méthode de Weierstrass convertit infailliblement toute fraction rationnelle en sinus et cosinus en une fonction rationnelle ordinaire de t.',
+    },
+    integral_applications: {
+      id: 'integral_applications',
+      title: 'Applications de l’Intégrale',
+      badge: 'Géométrie & Physique',
+      summary: 'Aire comprise entre des courbes, travail d’une force variable, pression hydrostatique des fluides et centres de gravité.',
+      subtopics: [
+        'Aire entre courbes sécantes : ∫ [f(x) - g(x)] dx',
+        'Travail d’élongation d’un ressort et pompage de réservoirs',
+        'Force hydrostatique et pression sur une paroi immergée',
+        'Centre de gravité et théorèmes de Guldin / Pappus',
+      ],
+      keyFormulas: [
+        { name: 'Aire entre Deux Courbes', latex: 'A = \\int_a^b [f(x) - g(x)]\\,dx \\quad (f(x) \\ge g(x))' },
+        { name: 'Travail (Loi de Hooke)', latex: 'W = \\int_a^b F(x)\\,dx = \\int_a^b k x\\,dx' },
+        { name: 'Coordonnées du Centre de Masse', latex: '\\bar{x} = \\frac{1}{A}\\int_a^b x[f(x)-g(x)]dx, \\quad \\bar{y} = \\frac{1}{2A}\\int_a^b [f(x)^2 - g(x)^2]dx' },
+      ],
+      overview:
+        'L’intégration permet de déterminer des grandeurs physiques et géométriques globales en sommant des éléments différentiels infinitésimaux sur un domaine continu.',
+    },
+    solids_revolution: {
+      id: 'solids_revolution',
+      title: 'Solides de Révolution',
+      badge: 'Disques & Rondelles',
+      summary: 'Volume des solides 3D engendrés par rotation d’une région plane autour d’un axe par disques circulaires ou rondelles.',
+      subtopics: [
+        'Méthode des Disques (solide plein sans évidement)',
+        'Méthode des Rondelles (cœur évidé avec rayons interne et externe)',
+        'Révolution autour de droites horizontales y = k',
+        'Révolution autour de droites verticales x = k',
+      ],
+      keyFormulas: [
+        { name: 'Méthode des Disques', latex: 'V = \\pi \\int_a^b [R(x)]^2\\,dx' },
+        { name: 'Méthode des Rondelles', latex: 'V = \\pi \\int_a^b \\left([R(x)]^2 - [r(x)]^2\\right)dx' },
+        { name: 'Révolution autour de y = k', latex: 'V = \\pi \\int_a^b \\left([f(x) - k]^2 - [g(x) - k]^2\\right)dx' },
+      ],
+      overview:
+        'Faire pivoter une surface 2D bornée par des courbes continues autour d’un axe fixe engendre un solide 3D de révolution dont le volume s’évalue en sommant des tranches circulaires.',
+    },
+    cylindrical_shells: {
+      id: 'cylindrical_shells',
+      title: 'Méthode des Tubes / Cylindres',
+      badge: 'Cylindres Déroulés',
+      summary: 'Calcul des volumes 3D à l’aide de cylindres concentriques parallèles à l’axe de révolution.',
+      subtopics: [
+        'Formule du volume des tubes : V = 2π ∫ (rayon)(hauteur) dx',
+        'Révolution autour de l’axe y sans inversion de fonction',
+        'Révolution autour d’axes décalés x = k',
+        'Comparaison d’efficacité entre Tubes et Rondelles',
+      ],
+      keyFormulas: [
+        { name: 'Méthode des Tubes (axe y)', latex: 'V = 2\\pi \\int_a^b x [f(x) - g(x)]\\,dx' },
+        { name: 'Méthode des Tubes (axe x = k)', latex: 'V = 2\\pi \\int_a^b |x - k| [f(x) - g(x)]\\,dx' },
+        { name: 'Volume d’un Tube Déroulé', latex: 'dV = 2\\pi r \\cdot h \\cdot dx' },
+      ],
+      overview:
+        'La méthode des tubes partitionne le volume en manchons cylindriques coaxiaux à l’axe de rotation, évitant souvent la résolution complexe de x en fonction de y.',
+    },
+    cross_sections: {
+      id: 'cross_sections',
+      title: 'Sections Transversales Connues',
+      badge: 'Tranches Générales',
+      summary: 'Principe de Cavalieri : volume de solides dont la base est délimitée par des courbes et dont les coupes transversales ont une forme géométrique connue.',
+      subtopics: [
+        'Formule Générale des Tranches : V = ∫ A(x) dx',
+        'Sections transversales carrées : A(x) = s²',
+        'Sections transversales en demi-disques : A(x) = π/8 s²',
+        'Sections transversales en triangles équilatéraux : A(x) = √3/4 s²',
+      ],
+      keyFormulas: [
+        { name: 'Volume Général', latex: 'V = \\int_a^b A(x)\\,dx' },
+        { name: 'Section Carrée', latex: 'A(x) = [f(x) - g(x)]^2' },
+        { name: 'Section en Demi-disque', latex: 'A(x) = \\frac{\\pi}{8} [f(x) - g(x)]^2' },
+        { name: 'Triangle Équilatéral', latex: 'A(x) = \\frac{\\sqrt{3}}{4} [f(x) - g(x)]^2' },
+      ],
+      overview:
+        'Si l’aire transversale A(x) orthogonale à un axe est connue en tout point x, le volume global s’obtient en intégrant A(x) sur l’intervalle [a, b].',
+    },
+    arc_length: {
+      id: 'arc_length',
+      title: 'Longueur d’Arc de Courbes',
+      badge: 'Longueur Curviligne',
+      summary: 'Distance rectiligne exacte le long d’une courbe régulière y = f(x) issue des différentielles pythagoriciennes infinitésimales.',
+      subtopics: [
+        'Élément d’arc différentiel ds = √(dx² + dy²)',
+        'Formule cartésienne de longueur d’arc : L = ∫ √(1 + [f\'(x)]²)',
+        'Chaînettes, paraboles et arcs de cercle',
+        'Approximation de courbes régulières par des polygones sécants',
+      ],
+      keyFormulas: [
+        { name: 'Élément Différentiel', latex: 'ds = \\sqrt{1 + \\left(\\frac{dy}{dx}\\right)^2} dx' },
+        { name: 'Formule de la Longueur d’Arc', latex: 'L = \\int_a^b \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+      ],
+      overview:
+        'La longueur d’arc d’une courbe plane régulière représente la limite de la somme des longueurs des cordes sécantes lorsque le pas de la subdivision tend vers zéro.',
+    },
+    surface_area: {
+      id: 'surface_area',
+      title: 'Aire de Surface de Révolution',
+      badge: 'Bandes de Tronc de Cône',
+      summary: 'Aire de la surface des solides 3D engendrés par rotation de courbes régulières autour d’axes.',
+      subtopics: [
+        'Bande différentielle de surface : dS = 2π r ds',
+        'Révolution autour de l’axe x : S = 2π ∫ y √(1 + [y\']²) dx',
+        'Révolution autour de l’axe y : S = 2π ∫ x √(1 + [y\']²) dx',
+        'Paradoxe de la Trompette de Gabriel (volume fini, aire infinie)',
+      ],
+      keyFormulas: [
+        { name: 'Surface (axe x)', latex: 'S = 2\\pi \\int_a^b |f(x)| \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+        { name: 'Surface (axe y)', latex: 'S = 2\\pi \\int_a^b |x| \\sqrt{1 + [f\'(x)]^2}\\,dx' },
+      ],
+      overview:
+        'La rotation d’un arc de courbe de longueur ds autour d’un axe balaie un mince ruban en tronc de cône d’aire 2π r ds dont l’intégration continue donne l’aire totale de la surface.',
     },
   },
 };
