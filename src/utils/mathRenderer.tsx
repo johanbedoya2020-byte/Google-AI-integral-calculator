@@ -60,20 +60,23 @@ export const MathView: React.FC<MathViewProps> = ({ math, block = false, classNa
 
 // Component to parse a mixed text string with embedded KaTeX blocks
 interface FormattedTextProps {
-  content: string;
+  content?: string;
+  text?: string;
   className?: string;
   inline?: boolean;
 }
 
 export const FormattedMathText: React.FC<FormattedTextProps> = ({
   content,
+  text,
   className = '',
   inline = false,
 }) => {
   const parts = useMemo(() => {
-    if (!content) return [];
+    const raw = content ?? text ?? '';
+    if (!raw) return [];
 
-    let normalized = content;
+    let normalized = raw;
 
     // Check if there are an odd number of unescaped $ signs (unmatched legacy math)
     const dollarCount = (normalized.match(/(?<!\\)\$/g) || []).length;
@@ -128,15 +131,6 @@ export const FormattedMathText: React.FC<FormattedTextProps> = ({
       else {
         // Strip any accidental stray literal $ in plain text
         const cleanText = token.replace(/\$/g, '');
-
-        // Check if there are unbracketed common LaTeX macros in plain text like \Delta x or \int
-        if (/\\(Delta|frac|int|sqrt|operatorname|approx|le|ge|ne)\b/.test(cleanText)) {
-          return (
-            <span key={idx} className="whitespace-pre-line">
-              <MathView math={cleanText.trim()} block={false} />
-            </span>
-          );
-        }
 
         return (
           <span key={idx} className="whitespace-pre-line">

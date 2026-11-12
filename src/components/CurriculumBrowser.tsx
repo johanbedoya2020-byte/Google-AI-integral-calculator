@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TopicCategory, CuratedExample } from '../types/calculus';
 import { LOCALIZED_TOPIC_CURRICULUM } from '../data/localizedContent';
 import { getCuratedExamplesByLanguage } from '../data/localizedExamples';
-import { MathView } from '../utils/mathRenderer';
+import { MathView, FormattedMathText } from '../utils/mathRenderer';
 import { useLanguage } from '../context/LanguageContext';
 import { BookOpen, Sparkles, ArrowRight, CheckCircle2, ChevronRight } from 'lucide-react';
 
@@ -116,7 +116,7 @@ export const CurriculumBrowser: React.FC<CurriculumBrowserProps> = ({
             <h3 className="text-base font-bold text-white">{topicInfo.title}</h3>
             <span className="text-xs text-indigo-400 font-semibold">{topicInfo.badge}</span>
           </div>
-          <p className="text-sm text-slate-300 leading-relaxed">{topicInfo.overview}</p>
+          <FormattedMathText text={topicInfo.overview} className="text-sm text-slate-300 leading-relaxed" />
 
           <div className="pt-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-2">
@@ -126,7 +126,7 @@ export const CurriculumBrowser: React.FC<CurriculumBrowserProps> = ({
               {topicInfo.subtopics.map((sub, i) => (
                 <div key={i} className="flex items-start gap-2 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800/60">
                   <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 shrink-0 mt-0.5" />
-                  <span>{sub}</span>
+                  <FormattedMathText text={sub} className="text-xs text-slate-300" />
                 </div>
               ))}
             </div>
